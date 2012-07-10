@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigMergeable;
@@ -326,5 +327,32 @@ abstract class AbstractConfigValue implements ConfigValue, MergeableValue {
     // other strings or by the DefaultTransformer.
     String transformToString() {
         return null;
+    }
+
+    SimpleConfig atKey(ConfigOrigin origin, String key) {
+        Map<String, AbstractConfigValue> m = Collections.singletonMap(key, this);
+        return (new SimpleConfigObject(origin, m)).toConfig();
+    }
+
+    @Override
+    public SimpleConfig atKey(String key) {
+        return atKey(SimpleConfigOrigin.newSimple("atKey(" + key + ")"), key);
+    }
+
+    SimpleConfig atPath(ConfigOrigin origin, Path path) {
+        Path parent = path.parent();
+        SimpleConfig result = atKey(origin, path.last());
+        while (parent != null) {
+            String key = parent.last();
+            result = result.atKey(origin, key);
+            parent = parent.parent();
+        }
+        return result;
+    }
+
+    @Override
+    public SimpleConfig atPath(String pathExpression) {
+        SimpleConfigOrigin origin = SimpleConfigOrigin.newSimple("atPath(" + pathExpression + ")");
+        return atPath(origin, Path.newPath(pathExpression));
     }
 }

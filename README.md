@@ -44,7 +44,7 @@ Maven Central.
     <dependency>
         <groupId>com.typesafe</groupId>
         <artifactId>config</artifactId>
-        <version>0.4.1</version>
+        <version>0.5.0</version>
     </dependency>
 
 Obsolete releases are here, but you probably don't want these:
@@ -240,6 +240,7 @@ tree that you could have written (less conveniently) in JSON.
   - substitutions normally cause an error if unresolved, but
     there is a syntax `${?a.b}` to permit them to be missing.
   - `+=` syntax to append elements to arrays, `path += "/bin"`
+  - multi-line strings with triple quotes as in Python or Scala
 
 ### Examples of HOCON
 

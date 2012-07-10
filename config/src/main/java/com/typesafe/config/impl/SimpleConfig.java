@@ -846,6 +846,26 @@ final class SimpleConfig implements Config, MergeableValue, Serializable {
         return new SimpleConfig(root().withoutPath(path));
     }
 
+    @Override
+    public SimpleConfig withValue(String pathExpression, ConfigValue v) {
+        Path path = Path.newPath(pathExpression);
+        return new SimpleConfig(root().withValue(path, v));
+    }
+
+    SimpleConfig atKey(ConfigOrigin origin, String key) {
+        return root().atKey(origin, key);
+    }
+
+    @Override
+    public SimpleConfig atKey(String key) {
+        return root().atKey(key);
+    }
+
+    @Override
+    public Config atPath(String path) {
+        return root().atPath(path);
+    }
+
     // serialization all goes through SerializedConfigValue
     private Object writeReplace() throws ObjectStreamException {
         return new SerializedConfigValue(this);
